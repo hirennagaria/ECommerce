@@ -61,6 +61,10 @@ public class MainActivity extends AppCompatActivity {
                 final String responseData = response.body().string();
 
                 try {
+                    Gson gson = new Gson();
+                    ProductModel productModel = gson.fromJson(responseData, ProductModel.class);
+
+                    productModel.save();
                     JSONObject jsonObject = new JSONObject(responseData);
                     JSONArray categories = jsonObject.getJSONArray("categories");
                     JSONArray rankings = jsonObject.getJSONArray("rankings");
