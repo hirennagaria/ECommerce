@@ -9,8 +9,21 @@ import android.os.Bundle;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.List;
+
+import javax.inject.Inject;
+
 import okhttp3.Cache;
+import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import retrofit2.Converter;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -18,14 +31,49 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
+    @Inject SharedPreferences sharedPreferences;
+    @Inject OkHttpClient okHttpClient;
+    @Inject Retrofit retrofit;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        ((MyApp) getApplication()).getNetComponent().inject(this);
+
+        Request request = new Request.Builder()
+                .url("https://stark-spire-93433.herokuapp.com/json")
+                .build();
+
+        okHttpClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (!response.isSuccessful()) {
+                    throw new IOException("Unexpected code " + response);
+                }
+
+                final String responseData = response.body().string();
+
+                try {
+                    JSONObject jsonObject = new JSONObject(responseData);
+                    JSONArray categories = jsonObject.getJSONArray("categories");
+                    JSONArray rankings = jsonObject.getJSONArray("rankings");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
 
 
-// Enable caching for OkHttp
+
+/*// Enable caching for OkHttp
         int cacheSize = 10 * 1024 * 1024; // 10 MiB
         Cache cache = new Cache(getApplication().getCacheDir(), cacheSize);
         OkHttpClient.Builder client = new OkHttpClient.Builder().cache(cache);
@@ -42,6 +90,6 @@ public class MainActivity extends AppCompatActivity {
                 .baseUrl("https://api.github.com")
                 .addConverterFactory(converterFactory)
                 .client(client.build())  // custom client
-                .build();
+                .build();*/
     }
 }
