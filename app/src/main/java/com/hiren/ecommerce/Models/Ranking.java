@@ -1,9 +1,11 @@
 
-package com.hiren.ecommerce;
+package com.hiren.ecommerce.Models;
 
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.hiren.ecommerce.ProductDatabase;
+import com.hiren.ecommerce.TypeConverters.Product_TypeConverter;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;

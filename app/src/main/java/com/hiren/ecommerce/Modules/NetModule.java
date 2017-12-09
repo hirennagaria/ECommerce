@@ -1,4 +1,4 @@
-package com.hiren.ecommerce;
+package com.hiren.ecommerce.Modules;
 
 
 import android.app.Application;

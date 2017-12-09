@@ -2,6 +2,8 @@ package com.hiren.ecommerce;
 
 import android.app.Application;
 
+import com.hiren.ecommerce.Modules.AppModule;
+import com.hiren.ecommerce.Modules.NetModule;
 import com.raizlabs.android.dbflow.config.DatabaseConfig;
 import com.raizlabs.android.dbflow.config.FlowConfig;
 import com.raizlabs.android.dbflow.config.FlowManager;

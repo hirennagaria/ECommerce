@@ -1,22 +1,46 @@
+
 package com.hiren.ecommerce.Models;
 
+import java.util.List;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+import com.hiren.ecommerce.ProductDatabase;
+import com.hiren.ecommerce.TypeConverters.TaxTypeConverter;
+import com.hiren.ecommerce.TypeConverters.VariantTypeConverter;
+import com.raizlabs.android.dbflow.annotation.Column;
+import com.raizlabs.android.dbflow.annotation.PrimaryKey;
+import com.raizlabs.android.dbflow.annotation.Table;
 
+@Table(database = ProductDatabase.class)
 public class Product {
 
-    private int id;
+    @SerializedName("id")
+    @Expose
+    @PrimaryKey
+    @Column
+    private Integer id;
+    @SerializedName("name")
+    @Expose
+    @Column
     private String name;
-    private int size;
-    private String color;
-    private String price;
-    private int views;
-    private int orders;
-    private int shares;
+    @SerializedName("date_added")
+    @Expose
+    @Column
+    private String dateAdded;
+    @SerializedName("variants")
+    @Expose
+    @Column(typeConverter = VariantTypeConverter.class)
+    private List<Variant> variants = null;
+    @SerializedName("tax")
+    @Expose
+    @Column(typeConverter = TaxTypeConverter.class)
+    private Tax tax;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -28,51 +52,28 @@ public class Product {
         this.name = name;
     }
 
-    public int getSize() {
-        return size;
+    public String getDateAdded() {
+        return dateAdded;
     }
 
-    public void setSize(int size) {
-        this.size = size;
+    public void setDateAdded(String dateAdded) {
+        this.dateAdded = dateAdded;
     }
 
-    public String getColor() {
-        return color;
+    public List<Variant> getVariants() {
+        return variants;
     }
 
-    public void setColor(String color) {
-        this.color = color;
+    public void setVariants(List<Variant> variants) {
+        this.variants = variants;
     }
 
-    public String getPrice() {
-        return price;
+    public Tax getTax() {
+        return tax;
     }
 
-    public void setPrice(String price) {
-        this.price = price;
+    public void setTax(Tax tax) {
+        this.tax = tax;
     }
 
-    public int getViews() {
-        return views;
-    }
-
-    public void setViews(int views) {
-        this.views = views;
-    }
-
-    public int getOrders() {
-        return orders;
-    }
-
-    public void setOrders(int orders) {
-        this.orders = orders;
-    }
-
-    public int getShares() {
-        return shares;
-    }
-
-    public void setShares(int shares) {
-        this.shares = shares;
-    }
 }

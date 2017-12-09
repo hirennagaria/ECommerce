@@ -1,17 +1,17 @@
-package com.hiren.ecommerce;
+package com.hiren.ecommerce.TypeConverters;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.hiren.ecommerce.Models.Tax;
 import com.raizlabs.android.dbflow.converter.TypeConverter;
 
 import java.util.List;
-import java.util.Locale;
 
-public class VariantTypeConverter extends TypeConverter<String, List<Variant>> {
+public class TaxTypeConverter extends TypeConverter<String, Tax> {
 
 
     @Override
-    public String getDBValue(List<Variant> model) {
+    public String getDBValue(Tax model) {
         if(model != null) {
             Gson gson = new Gson();
             return gson.toJson(model);
@@ -21,10 +21,10 @@ public class VariantTypeConverter extends TypeConverter<String, List<Variant>> {
     }
 
     @Override
-    public List<Variant> getModelValue(String data) {
+    public Tax getModelValue(String data) {
         Gson gson = new Gson();
-        List<Variant> variants = gson.fromJson(data, new TypeToken<List<Variant>>(){}.getType());
-        return variants;
+        Tax taxes = gson.fromJson(data, new TypeToken<List<Tax>>(){}.getType());
+        return taxes;
     }
 
 

@@ -1,7 +1,8 @@
-package com.hiren.ecommerce;
+package com.hiren.ecommerce.TypeConverters;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.hiren.ecommerce.Models.Ranking;
 import com.raizlabs.android.dbflow.converter.TypeConverter;
 
 import java.util.List;

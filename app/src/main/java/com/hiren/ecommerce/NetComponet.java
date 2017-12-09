@@ -1,5 +1,8 @@
 package com.hiren.ecommerce;
 
+import com.hiren.ecommerce.Modules.AppModule;
+import com.hiren.ecommerce.Modules.NetModule;
+
 import javax.inject.Singleton;
 
 import dagger.Component;

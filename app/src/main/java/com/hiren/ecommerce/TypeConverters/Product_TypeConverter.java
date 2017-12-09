@@ -1,11 +1,11 @@
-package com.hiren.ecommerce;
+package com.hiren.ecommerce.TypeConverters;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.hiren.ecommerce.Models.Product_;
 import com.raizlabs.android.dbflow.converter.TypeConverter;
 
 import java.util.List;
-import java.util.Locale;
 
 public class Product_TypeConverter extends TypeConverter<String, List<Product_>> {
 
