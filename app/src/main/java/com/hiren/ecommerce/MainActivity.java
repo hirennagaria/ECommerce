@@ -2,8 +2,10 @@
 package com.hiren.ecommerce;
 
 import android.content.SharedPreferences;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 
 import com.google.gson.Gson;
 import com.hiren.ecommerce.Models.ProductModel;
@@ -29,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     @Inject SharedPreferences sharedPreferences;
     @Inject OkHttpClient okHttpClient;
     @Inject Retrofit retrofit;
+    SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +40,41 @@ public class MainActivity extends AppCompatActivity {
 
         ((MyApp) getApplication()).getNetComponent().inject(this);
 
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refreshLayout);
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                updateData();
+            }
+        });
+
+        fetchData();
+
+
+
+
+/*// Enable caching for OkHttp
+        int cacheSize = 10 * 1024 * 1024; // 10 MiB
+        Cache cache = new Cache(getApplication().getCacheDir(), cacheSize);
+        OkHttpClient.Builder client = new OkHttpClient.Builder().cache(cache);
+
+// Used for caching authentication tokens
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+// Instantiate Gson
+        Gson gson = new GsonBuilder().create();
+        GsonConverterFactory converterFactory = GsonConverterFactory.create(gson);
+
+// Build Retrofit
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://api.github.com")
+                .addConverterFactory(converterFactory)
+                .client(client.build())  // custom client
+                .build();*/
+    }
+
+    void fetchData(){
         Request request = new Request.Builder()
                 .url("https://stark-spire-93433.herokuapp.com/json")
                 .build();
@@ -69,26 +107,25 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+    }
 
+    void updateData(){
+        fetchData();
+        swipeRefreshLayout.setRefreshing(false);
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
 
-/*// Enable caching for OkHttp
-        int cacheSize = 10 * 1024 * 1024; // 10 MiB
-        Cache cache = new Cache(getApplication().getCacheDir(), cacheSize);
-        OkHttpClient.Builder client = new OkHttpClient.Builder().cache(cache);
+            case R.id.menu_refresh :
+                swipeRefreshLayout.setRefreshing(true);
 
-// Used for caching authentication tokens
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+                updateData();
 
-// Instantiate Gson
-        Gson gson = new GsonBuilder().create();
-        GsonConverterFactory converterFactory = GsonConverterFactory.create(gson);
+                return true;
+        }
 
-// Build Retrofit
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://api.github.com")
-                .addConverterFactory(converterFactory)
-                .client(client.build())  // custom client
-                .build();*/
+        return super.onOptionsItemSelected(item);
     }
 }
