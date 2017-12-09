@@ -5,9 +5,13 @@ import android.content.SharedPreferences;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 
 import com.google.gson.Gson;
+import com.hiren.ecommerce.Models.Category;
 import com.hiren.ecommerce.Models.ProductModel;
 
 import org.json.JSONArray;
@@ -15,6 +19,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.inject.Inject;
 
@@ -32,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
     @Inject OkHttpClient okHttpClient;
     @Inject Retrofit retrofit;
     SwipeRefreshLayout swipeRefreshLayout;
+    RecyclerView recyclerView;
+    LinearLayoutManager layoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +56,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        recyclerView = (RecyclerView) findViewById(R.id.categoriesRV);
+        recyclerView.setHasFixedSize(true);
+
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+
         fetchData();
+
 
 
 
@@ -93,17 +108,19 @@ public class MainActivity extends AppCompatActivity {
 
                 final String responseData = response.body().string();
 
-                try {
-                    Gson gson = new Gson();
-                    ProductModel productModel = gson.fromJson(responseData, ProductModel.class);
+                Gson gson = new Gson();
+                ProductModel productModel = gson.fromJson(responseData, ProductModel.class);
 
-                    productModel.save();
-                    JSONObject jsonObject = new JSONObject(responseData);
-                    JSONArray categories = jsonObject.getJSONArray("categories");
-                    JSONArray rankings = jsonObject.getJSONArray("rankings");
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                productModel.save();
+
+                ArrayList<String> categories = new ArrayList<String>();
+                for (Category category :
+                        productModel.getCategories()) {
+                    if (category.getChildCategories().size() > 0) {
+
+                    }
                 }
+
 
             }
         });

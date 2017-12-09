@@ -2,4 +2,5 @@
     <string name="app_name">E Commerce</string>
     <string name="menu_refresh">Refresh</string>
     <string name="menu_filter">Filter</string>
+    <string name="size">Size</string>
 </resources>
