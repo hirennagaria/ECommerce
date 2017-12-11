@@ -6,18 +6,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.hiren.ecommerce.Models.Category;
+
 import java.util.ArrayList;
 
 
 public class CategoriesAdapter extends RecyclerView.Adapter {
 
-    private ArrayList<String> categories;
+    private ArrayList<Category> categories;
 
-    public CategoriesAdapter(ArrayList<String> data) {
+    public CategoriesAdapter(ArrayList<Category> data) {
         this.categories = data;
     }
 
-    public static class CategoriesViewHolder extends RecyclerView.ViewHolder{
+    public static class CategoriesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         TextView textView;
 
@@ -31,6 +33,11 @@ public class CategoriesAdapter extends RecyclerView.Adapter {
         public TextView getTextView() {
             return textView;
         }
+
+        @Override
+        public void onClick(View view) {
+            int position = getAdapterPosition();
+        }
     }
 
     @Override
@@ -40,6 +47,7 @@ public class CategoriesAdapter extends RecyclerView.Adapter {
 
         CategoriesViewHolder viewHolder = new CategoriesViewHolder(view);
 
+
         return viewHolder;
     }
 
@@ -48,7 +56,7 @@ public class CategoriesAdapter extends RecyclerView.Adapter {
 
         TextView cat_name = ((CategoriesViewHolder) holder).getTextView();
 
-        cat_name.setText(categories.get(position));
+        cat_name.setText(categories.get(position).getName());
     }
 
     @Override

@@ -9,9 +9,11 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.google.gson.Gson;
 import com.hiren.ecommerce.Models.Category;
+import com.hiren.ecommerce.Models.Product;
 import com.hiren.ecommerce.Models.ProductModel;
 
 import org.json.JSONArray;
@@ -20,6 +22,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -39,6 +42,9 @@ public class MainActivity extends AppCompatActivity {
     SwipeRefreshLayout swipeRefreshLayout;
     RecyclerView recyclerView;
     LinearLayoutManager layoutManager;
+    ProductModel productModel;
+    ArrayList<Category> categories;
+    CategoriesAdapter categoriesAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,10 +69,39 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
+        categories = new ArrayList<>();
+
         fetchData();
 
 
+        categoriesAdapter = new CategoriesAdapter(categories);
 
+        recyclerView.setAdapter(categoriesAdapter);
+
+        ItemClickSupport.addTo(recyclerView).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+            @Override
+            public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                Category category = categories.get(position);
+
+                if(category.getChildCategories().size() > 0) {
+                    categories.clear();
+                    for (Category cat :
+                            productModel.getCategories()) {
+                        for (int i = 0; i < category.getChildCategories().size(); i++) {
+                            if (cat.getId() == category.getChildCategories().get(i)) {
+                                categories.add(cat);
+                            }
+                        }
+                    }
+
+                    categoriesAdapter.notifyDataSetChanged();
+                }
+
+                else {
+                    List<Product> products = category.getProducts();
+                }
+            }
+        });
 
 
 /*// Enable caching for OkHttp
@@ -109,18 +144,32 @@ public class MainActivity extends AppCompatActivity {
                 final String responseData = response.body().string();
 
                 Gson gson = new Gson();
-                ProductModel productModel = gson.fromJson(responseData, ProductModel.class);
+                productModel = gson.fromJson(responseData, ProductModel.class);
 
                 productModel.save();
 
-                ArrayList<String> categories = new ArrayList<String>();
+
                 for (Category category :
                         productModel.getCategories()) {
                     if (category.getChildCategories().size() > 0) {
-
+                        categories.add(category);
                     }
                 }
 
+                for (int i = 0; i < categories.size(); i++) {
+                    for (int j = 0; j < categories.size(); j++) {
+                        if(categories.get(i).getChildCategories().contains(categories.get(j).getId())){
+                            categories.remove(j);
+                            j--;
+                        }
+                    }
+                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        categoriesAdapter.notifyDataSetChanged();
+                    }
+                });
 
             }
         });
