@@ -1,6 +1,7 @@
 
 package com.hiren.ecommerce;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -36,6 +37,7 @@ import retrofit2.Retrofit;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String CATEGORYID = "CategoryId";
     @Inject SharedPreferences sharedPreferences;
     @Inject OkHttpClient okHttpClient;
     @Inject Retrofit retrofit;
@@ -98,7 +100,9 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 else {
-                    List<Product> products = category.getProducts();
+                    Intent intent = new Intent(MainActivity.this, ProductListActivity.class);
+                    intent.putExtra(CATEGORYID, category.getId());
+                    startActivity(intent);
                 }
             }
         });
