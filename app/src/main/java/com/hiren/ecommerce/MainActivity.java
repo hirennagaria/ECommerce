@@ -37,7 +37,7 @@ import retrofit2.Retrofit;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String CATEGORYID = "CategoryId";
+    public static final String CATEGORYID = "CategoryId";
     @Inject SharedPreferences sharedPreferences;
     @Inject OkHttpClient okHttpClient;
     @Inject Retrofit retrofit;
